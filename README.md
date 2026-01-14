@@ -9,7 +9,7 @@ public runners, with ssh access to them using [action-tmate](https://github.com/
 1. Fork this repo
 2. Enable actions on your fork: Actions -> enable
 3. Trigger a workflow manually: Actions -> build.yml -> Run workflow (master)
-4. Go to any job, see the ssh command, and connect using your GitHub key.
+4. Go to any job, see the ssh command, and connect using your GitHub ssh key.
 
 Note: All jobs will timeout after 6 hours, or end once you logout from the
 machine.
