@@ -25,3 +25,6 @@ Supported arm64 runners:
 - ubuntu-24.04-arm
 - windows-11-arm
 - macos-26
+
+Note: for bsd runners, you get an access to linux runner, and need to use `ssh
+freebsd` or `ssh netbsd` to access vm.
