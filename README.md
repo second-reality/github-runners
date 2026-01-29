@@ -4,7 +4,7 @@ SSH access to Windows/Linux/MacOS/BSD runners
 GitHub offers unlimited and free CI minutes to all public repositories.
 
 This repository contains a GitHub workflow spawning jobs for all available
-public runners, with ssh access to them using [action-tmate](https://github.com/mxschmitt/action-tmate).
+public runners, with ssh access to them using [action-upterm](https://github.com/owenthereal/action-upterm).
 
 1. Fork this repo
 2. Enable actions on your fork: Actions -> enable
