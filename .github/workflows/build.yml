@@ -14,10 +14,10 @@ jobs:
         os: [ubuntu-24.04, macos-26, macos-15-intel, windows-2025, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: owenthereal/action-upterm@v1
-        with:
-          limit-access-to-actor: true
+      - uses: mxschmitt/action-tmate@v3
 
+  # https://github.com/mxschmitt/action-tmate/issues/216 (not working anymore)
+  # https://github.com/mxschmitt/action-tmate/commit/877e019b4c15232d15c3b8e4de31f91d845c69f7
   debug-windows-11-arm:
     runs-on: windows-11-arm
     steps:
@@ -25,10 +25,8 @@ jobs:
       with:
         msystem: 'CLANGARM64'
         location: C:\.\
+    - uses: mxschmitt/action-tmate@v3
     # To open CLANGARM64 shell: env MSYSTEM=CLANGARM64 bash -l
-    - uses: owenthereal/action-upterm@v1
-      with:
-        limit-access-to-actor: true
 
   debug-freebsd:
     runs-on: ubuntu-latest
@@ -40,9 +38,7 @@ jobs:
       - shell: freebsd {0}
         run: set -ex && pkg update && pkg install -y git
       - run: echo "connect with 'ssh freebsd'"
-      - uses: owenthereal/action-upterm@v1
-        with:
-          limit-access-to-actor: true
+      - uses: mxschmitt/action-tmate@v3
 
   debug-netbsd:
     runs-on: ubuntu-latest
@@ -54,6 +50,4 @@ jobs:
       - shell: netbsd {0}
         run: set -ex && pkg_add pkgin && pkgin -y install git
       - run: echo "connect with 'ssh netbsd'"
-      - uses: owenthereal/action-upterm@v1
-        with:
-          limit-access-to-actor: true
+      - uses: mxschmitt/action-tmate@v3
