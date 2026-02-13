@@ -46,7 +46,7 @@ jobs:
       - uses: vmactions/netbsd-vm@v1
         with:
           copyback: false
-          release: "10.0"
+          release: "10.1"
       - shell: netbsd {0}
         run: set -ex && pkg_add pkgin && pkgin -y install git
       - run: echo "connect with 'ssh netbsd'"
