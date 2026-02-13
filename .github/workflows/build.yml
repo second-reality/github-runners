@@ -51,3 +51,15 @@ jobs:
         run: set -ex && pkg_add pkgin && pkgin -y install git
       - run: echo "connect with 'ssh netbsd'"
       - uses: mxschmitt/action-tmate@v3
+
+  debug-openbsd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: vmactions/openbsd-vm@v1
+        with:
+          copyback: false
+          release: "7.7"
+      - shell: openbsd {0}
+        run: set -ex && pkg_add pkgin && pkgin -y install git
+      - run: echo "connect with 'ssh openbsd'"
+      - uses: mxschmitt/action-tmate@v3

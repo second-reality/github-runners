@@ -20,6 +20,7 @@ Supported x86_64 runners:
 - macos-15-intel
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
 - netbsd (using [netbsd-vm](https://github.com/vmactions/netbsd-vm))
+- openbsd (using [openbsd-vm](https://github.com/vmactions/openbsd-vm))
 
 Supported arm64 runners:
 - ubuntu-24.04-arm
