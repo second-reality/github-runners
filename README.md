@@ -21,11 +21,12 @@ Supported x86_64 runners:
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
 - netbsd (using [netbsd-vm](https://github.com/vmactions/netbsd-vm))
 - openbsd (using [openbsd-vm](https://github.com/vmactions/openbsd-vm))
+- haiku (using [haiku-vm](https://github.com/vmactions/haiku-vm))
 
 Supported arm64 runners:
 - ubuntu-24.04-arm
 - windows-11-arm
 - macos-26
 
-Note: for bsd runners, you get an access to linux runner, and need to use `ssh
-freebsd` or `ssh netbsd` to access vm.
+Note: for bsd and haiku runners, you get an access to linux runner, and need to
+use `ssh freebsd`, `ssh netbsd`, `ssh openbsd` or `ssh haiku` to access vm.

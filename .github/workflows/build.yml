@@ -63,3 +63,15 @@ jobs:
         run: set -ex && pkg_add pkgin && pkgin -y install git
       - run: echo "connect with 'ssh openbsd'"
       - uses: mxschmitt/action-tmate@v3
+
+  debug-haiku:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: vmactions/haiku-vm@v1
+        with:
+          copyback: false
+          release: "r1beta5"
+      - shell: haiku {0}
+        run: set -ex && pkgman install -y git
+      - run: echo "connect with 'ssh haiku'"
+      - uses: mxschmitt/action-tmate@v3
