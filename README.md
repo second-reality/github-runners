@@ -14,15 +14,14 @@ public runners, with ssh access to them using [action-tmate](https://github.com/
 NOTE: All jobs will timeout after 6 hours, or end once you logout from the
 machine.
 
-NOTE: for bsd and haiku runners, you get an access to linux runner, and need to
-use `ssh freebsd`, `ssh netbsd`, `ssh openbsd` or `ssh haiku` to access vm.
+NOTE: for bsd runners, you get an access to linux runner, and need to
+use `ssh freebsd`, `ssh netbsd` or `ssh openbsd` to access VM.
 
 NOTE: for windows runners, tmate forces a MINGW64 shell by default. Use `bash`
 (without parameters) another time to access correct environment.
 
 Supported x86_64 runners:
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
-- haiku (using [haiku-vm](https://github.com/vmactions/haiku-vm))
 - macos-15-intel
 - netbsd (using [netbsd-vm](https://github.com/vmactions/netbsd-vm))
 - openbsd (using [openbsd-vm](https://github.com/vmactions/openbsd-vm))

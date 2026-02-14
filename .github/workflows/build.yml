@@ -20,18 +20,6 @@ jobs:
       - run: echo "connect with 'ssh freebsd'"
       - uses: mxschmitt/action-tmate@v3
 
-  debug-x86_64-haiku:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: vmactions/haiku-vm@v1
-        with:
-          copyback: false
-          release: "r1beta5"
-      - shell: haiku {0}
-        run: set -ex && pkgman install -y devel:libbz2 devel:libcapstone devel:libcurl devel:libfdt devel:libgcrypt devel:libgl devel:libglib_2.0 devel:libgnutls devel:libintl devel:libjpeg devel:liblzo2 devel:libncursesw devel:libnettle devel:libpixman_1 devel:libpng16 devel:libsdl2_2.0 devel:libslirp devel:libsnappy devel:libssh2 devel:libtasn1 devel:libusb_1.0 devel:libz ninja pip tomli_python310
-      - run: echo "connect with 'ssh haiku'"
-      - uses: mxschmitt/action-tmate@v3
-
   debug-x86_64-macos-15-intel:
     runs-on: macos-15-intel
     steps:
