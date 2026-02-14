@@ -5,30 +5,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# https://github.com/actions/runner-images
 jobs:
-  # https://github.com/actions/runner-images
-  debug-job:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, macos-26, macos-15-intel, windows-2025, ubuntu-24.04-arm]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: mxschmitt/action-tmate@v3
-
-  # https://github.com/mxschmitt/action-tmate/issues/216 (not working anymore)
-  # https://github.com/mxschmitt/action-tmate/commit/877e019b4c15232d15c3b8e4de31f91d845c69f7
-  debug-windows-11-arm:
-    runs-on: windows-11-arm
-    steps:
-    - uses: msys2/setup-msys2@v2
-      with:
-        msystem: 'CLANGARM64'
-        location: C:\.\
-    - uses: mxschmitt/action-tmate@v3
-    # To open CLANGARM64 shell: env MSYSTEM=CLANGARM64 bash -l
-
-  debug-freebsd:
+  debug-x86_64-freebsd:
     runs-on: ubuntu-latest
     steps:
       - uses: vmactions/freebsd-vm@v1
@@ -40,7 +19,24 @@ jobs:
       - run: echo "connect with 'ssh freebsd'"
       - uses: mxschmitt/action-tmate@v3
 
-  debug-netbsd:
+  debug-x86_64-haiku:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: vmactions/haiku-vm@v1
+        with:
+          copyback: false
+          release: "r1beta5"
+      - shell: haiku {0}
+        run: set -ex && pkgman install -y git
+      - run: echo "connect with 'ssh haiku'"
+      - uses: mxschmitt/action-tmate@v3
+
+  debug-x86_64-macos-15-intel:
+    runs-on: macos-15-intel
+    steps:
+      - uses: mxschmitt/action-tmate@v3
+
+  debug-x86_64-netbsd:
     runs-on: ubuntu-latest
     steps:
       - uses: vmactions/netbsd-vm@v1
@@ -52,7 +48,7 @@ jobs:
       - run: echo "connect with 'ssh netbsd'"
       - uses: mxschmitt/action-tmate@v3
 
-  debug-openbsd:
+  debug-x86_64-openbsd:
     runs-on: ubuntu-latest
     steps:
       - uses: vmactions/openbsd-vm@v1
@@ -64,14 +60,35 @@ jobs:
       - run: echo "connect with 'ssh openbsd'"
       - uses: mxschmitt/action-tmate@v3
 
-  debug-haiku:
-    runs-on: ubuntu-latest
+  debug-x86_64-ubuntu-2404:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: vmactions/haiku-vm@v1
-        with:
-          copyback: false
-          release: "r1beta5"
-      - shell: haiku {0}
-        run: set -ex && pkgman install -y git
-      - run: echo "connect with 'ssh haiku'"
       - uses: mxschmitt/action-tmate@v3
+
+  debug-x86_64-windows-2025:
+    runs-on: windows-2025
+    steps:
+      - uses: mxschmitt/action-tmate@v3
+
+  debug-aarch64-macos-26:
+    runs-on: macos-26
+    steps:
+      - uses: mxschmitt/action-tmate@v3
+
+  debug-aarch64-ubuntu-2404:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: mxschmitt/action-tmate@v3
+
+  # https://github.com/mxschmitt/action-tmate/issues/216 (not working anymore)
+  # https://github.com/mxschmitt/action-tmate/commit/877e019b4c15232d15c3b8e4de31f91d845c69f7
+  debug-aarch64-windows-11:
+    runs-on: windows-11-arm
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: 'CLANGARM64'
+        location: C:\.\
+    - uses: mxschmitt/action-tmate@v3
+    # To open CLANGARM64 shell: env MSYSTEM=CLANGARM64 bash -l
+
