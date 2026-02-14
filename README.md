@@ -15,18 +15,18 @@ Note: All jobs will timeout after 6 hours, or end once you logout from the
 machine.
 
 Supported x86_64 runners:
-- ubuntu-24.04
-- windows-2025
-- macos-15-intel
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
+- haiku (using [haiku-vm](https://github.com/vmactions/haiku-vm))
+- macos-15-intel
 - netbsd (using [netbsd-vm](https://github.com/vmactions/netbsd-vm))
 - openbsd (using [openbsd-vm](https://github.com/vmactions/openbsd-vm))
-- haiku (using [haiku-vm](https://github.com/vmactions/haiku-vm))
+- ubuntu-24.04
+- windows-2025
 
 Supported arm64 runners:
 - ubuntu-24.04-arm
-- windows-11-arm
 - macos-26
+- windows-11-arm
 
 Note: for bsd and haiku runners, you get an access to linux runner, and need to
 use `ssh freebsd`, `ssh netbsd`, `ssh openbsd` or `ssh haiku` to access vm.
