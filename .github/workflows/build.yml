@@ -46,6 +46,9 @@ jobs:
         with:
           copyback: false
           release: "7.7"
+      # move root home to /home, which has all disk space
+      - shell: openbsd {0}
+        run: mv /root/ /home/ && ln -s /home/root/ /root
       - shell: openbsd {0}
         run: set -ex && pkg_add dtc git pkgconf bzip2 xz ninja bash gmake gsed gettext-tools gnutls capstone sdl2 gtk+3 libxkbcommon zstd libslirp
       - run: echo "connect with 'ssh openbsd'"
