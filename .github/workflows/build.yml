@@ -6,6 +6,7 @@ concurrency:
   cancel-in-progress: true
 
 # https://github.com/actions/runner-images
+# dependencies: https://gitlab.com/qemu-project/qemu/-/tree/master/tests/vm
 jobs:
   debug-x86_64-freebsd:
     runs-on: ubuntu-latest
@@ -15,7 +16,7 @@ jobs:
           copyback: false
           release: "14.3"
       - shell: freebsd {0}
-        run: set -ex && pkg update && pkg install -y git
+        run: pkg update && pkg install -y git gcc gmake python pkgconf pixman bison glib ninja
       - run: echo "connect with 'ssh freebsd'"
       - uses: mxschmitt/action-tmate@v3
 
@@ -27,13 +28,15 @@ jobs:
           copyback: false
           release: "r1beta5"
       - shell: haiku {0}
-        run: set -ex && pkgman install -y git
+        run: set -ex && pkgman install -y devel:libbz2 devel:libcapstone devel:libcurl devel:libfdt devel:libgcrypt devel:libgl devel:libglib_2.0 devel:libgnutls devel:libintl devel:libjpeg devel:liblzo2 devel:libncursesw devel:libnettle devel:libpixman_1 devel:libpng16 devel:libsdl2_2.0 devel:libslirp devel:libsnappy devel:libssh2 devel:libtasn1 devel:libusb_1.0 devel:libz ninja pip tomli_python310
       - run: echo "connect with 'ssh haiku'"
       - uses: mxschmitt/action-tmate@v3
 
   debug-x86_64-macos-15-intel:
     runs-on: macos-15-intel
     steps:
+      - run: brew uninstall cmake # conflict with install command below
+      - run: brew install --quiet $(env HOMEBREW_NO_ENV_HINTS=1 brew deps --include-build qemu)
       - uses: mxschmitt/action-tmate@v3
 
   debug-x86_64-netbsd:
@@ -44,7 +47,7 @@ jobs:
           copyback: false
           release: "10.1"
       - shell: netbsd {0}
-        run: set -ex && pkg_add pkgin && pkgin -y install git
+        run: set -ex && pkg_add pkgin && pkgin -y install git gmake python314 pkgconf pixman bison glib ninja-build && ln -s /usr/pkg/bin/python3.14 /usr/bin/python3
       - run: echo "connect with 'ssh netbsd'"
       - uses: mxschmitt/action-tmate@v3
 
@@ -56,39 +59,75 @@ jobs:
           copyback: false
           release: "7.7"
       - shell: openbsd {0}
-        run: set -ex && pkg_add pkgin && pkgin -y install git
+        run: set -ex && pkg_add dtc git pkgconf bzip2 xz ninja bash gmake gsed gettext-tools gnutls capstone sdl2 gtk+3 libxkbcommon zstd libslirp
       - run: echo "connect with 'ssh openbsd'"
       - uses: mxschmitt/action-tmate@v3
 
   debug-x86_64-ubuntu-2404:
     runs-on: ubuntu-24.04
     steps:
+      - run: sudo sed -i 's/deb$/deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
+      - run: sudo apt update && sudo apt build-dep --arch-only -y qemu
       - uses: mxschmitt/action-tmate@v3
 
-  debug-x86_64-windows-2025:
-    runs-on: windows-2025
+  debug-windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - sys: UCRT64
+            image: windows-2025
+            arch: x64
+          - sys: CLANG64
+            image: windows-2025
+            arch: x64
+          - sys: MINGW64
+            image: windows-2025
+            arch: x64
+          - sys: CLANGARM64
+            image: windows-11-arm
+            arch: arm64
+    runs-on: ${{matrix.image}}
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: ${{matrix.sys}}
+          location: C:/m/
+      - run: >
+          pacman -S --noconfirm base-devel binutils bison curl diffutils flex git grep make sed
+          ${MINGW_PACKAGE_PREFIX}-toolchain
+          ${MINGW_PACKAGE_PREFIX}-glib2
+          ${MINGW_PACKAGE_PREFIX}-gtk3
+          ${MINGW_PACKAGE_PREFIX}-libnfs
+          ${MINGW_PACKAGE_PREFIX}-libssh
+          ${MINGW_PACKAGE_PREFIX}-ninja
+          ${MINGW_PACKAGE_PREFIX}-pixman
+          ${MINGW_PACKAGE_PREFIX}-pkgconf
+          ${MINGW_PACKAGE_PREFIX}-python
+          ${MINGW_PACKAGE_PREFIX}-SDL2
+          ${MINGW_PACKAGE_PREFIX}-zstd
+      # Install all dependencies for windows build
+      - run: git clone https://github.com/msys2/MINGW-packages --depth=1
+      - run: pushd ./MINGW-packages/mingw-w64-qemu && (makepkg --syncdeps --nobuild --noprepare --noconfirm --skippgpcheck PKGBUILD || true) && popd
+      - run: echo 'if [ $MSYSTEM != ${{matrix.sys}} ]; then MSYSTEM=${{matrix.sys}} bash -l; fi;' >> ~/.bashrc
       - uses: mxschmitt/action-tmate@v3
+        with:
+          msys2-location: C:/m/msys64
 
   debug-aarch64-macos-26:
     runs-on: macos-26
     steps:
+      - run: brew uninstall cmake # conflict with install command below
+      - run: brew install --quiet $(env HOMEBREW_NO_ENV_HINTS=1 brew deps --include-build qemu)
       - uses: mxschmitt/action-tmate@v3
 
   debug-aarch64-ubuntu-2404:
     runs-on: ubuntu-24.04-arm
     steps:
+      - run: sudo sed -i 's/deb$/deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
+      - run: sudo apt update && sudo apt build-dep --arch-only -y qemu
       - uses: mxschmitt/action-tmate@v3
-
-  # https://github.com/mxschmitt/action-tmate/issues/216 (not working anymore)
-  # https://github.com/mxschmitt/action-tmate/commit/877e019b4c15232d15c3b8e4de31f91d845c69f7
-  debug-aarch64-windows-11:
-    runs-on: windows-11-arm
-    steps:
-    - uses: msys2/setup-msys2@v2
-      with:
-        msystem: 'CLANGARM64'
-        location: C:\.\
-    - uses: mxschmitt/action-tmate@v3
-    # To open CLANGARM64 shell: env MSYSTEM=CLANGARM64 bash -l
-

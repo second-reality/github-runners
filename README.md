@@ -11,8 +11,14 @@ public runners, with ssh access to them using [action-tmate](https://github.com/
 3. Trigger a workflow manually: Actions -> build.yml -> Run workflow (master)
 4. Go to any job, see the ssh command, and connect using your GitHub ssh key.
 
-Note: All jobs will timeout after 6 hours, or end once you logout from the
+NOTE: All jobs will timeout after 6 hours, or end once you logout from the
 machine.
+
+NOTE: for bsd and haiku runners, you get an access to linux runner, and need to
+use `ssh freebsd`, `ssh netbsd`, `ssh openbsd` or `ssh haiku` to access vm.
+
+NOTE: for windows runners, tmate forces a MINGW64 shell by default. Use `bash`
+(without parameters) another time to access correct environment.
 
 Supported x86_64 runners:
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
@@ -21,12 +27,12 @@ Supported x86_64 runners:
 - netbsd (using [netbsd-vm](https://github.com/vmactions/netbsd-vm))
 - openbsd (using [openbsd-vm](https://github.com/vmactions/openbsd-vm))
 - ubuntu-24.04
-- windows-2025
+- windows-2025 (msys2 mingw64, ucrt64 and clang64 environments)
 
 Supported arm64 runners:
 - ubuntu-24.04-arm
 - macos-26
-- windows-11-arm
+- windows-11-arm (msys2 clangarm64 environment)
 
-Note: for bsd and haiku runners, you get an access to linux runner, and need to
-use `ssh freebsd`, `ssh netbsd`, `ssh openbsd` or `ssh haiku` to access vm.
+This repository is mostly used to provide runners for QEMU, thus it install
+build dependencies by default.
