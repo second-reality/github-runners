@@ -9,16 +9,14 @@ public runners, with ssh access to them using [action-tmate](https://github.com/
 1. Fork this repo
 2. Enable actions on your fork: Actions -> enable
 3. Trigger a workflow manually: Actions -> build.yml -> Run workflow (master)
-4. Go to any job, see the ssh command, and connect using your GitHub ssh key.
+4. Go to any job, see the ssh command, and connect using your GitHub ssh key
+5. Jobs will timeout after 6 hours, or end once you logout from the machine
 
-NOTE: All jobs will timeout after 6 hours, or end once you logout from the
-machine.
+**NOTE: for bsd runners, you get an access to linux runner, and need to
+use `ssh freebsd`, `ssh netbsd` or `ssh openbsd` to access VM.**
 
-NOTE: for bsd runners, you get an access to linux runner, and need to
-use `ssh freebsd`, `ssh netbsd` or `ssh openbsd` to access VM.
-
-NOTE: for windows runners, tmate forces a MINGW64 shell by default. Use `bash`
-(without parameters) another time to access correct environment.
+**NOTE: for windows runners, tmate forces a MINGW64 shell by default. Use `bash`
+(without parameters) another time to access correct environment.**
 
 Supported x86_64 runners:
 - freebsd (using [freebsd-vm](https://github.com/vmactions/freebsd-vm))
