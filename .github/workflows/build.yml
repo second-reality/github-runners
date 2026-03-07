@@ -17,6 +17,8 @@ jobs:
           release: "14.3"
       - shell: freebsd {0}
         run: pkg update && pkg install -y git gcc gmake python pkgconf pixman bison glib ninja
+      - shell: freebsd {0}
+        run: git clone https://github.com/qemu/qemu
       - run: echo "connect with 'ssh freebsd'"
       - uses: mxschmitt/action-tmate@v3
 
@@ -25,6 +27,7 @@ jobs:
     steps:
       - run: brew uninstall cmake # conflict with install command below
       - run: brew install --quiet $(env HOMEBREW_NO_ENV_HINTS=1 brew deps --include-build qemu)
+      - run: git clone https://github.com/qemu/qemu
       - uses: mxschmitt/action-tmate@v3
 
   debug-x86_64-netbsd:
@@ -36,6 +39,8 @@ jobs:
           release: "10.1"
       - shell: netbsd {0}
         run: set -ex && pkg_add pkgin && pkgin -y install git gmake python314 pkgconf pixman bison glib ninja-build && ln -s /usr/pkg/bin/python3.14 /usr/bin/python3
+      - shell: netbsd {0}
+        run: git clone https://github.com/qemu/qemu
       - run: echo "connect with 'ssh netbsd'"
       - uses: mxschmitt/action-tmate@v3
 
@@ -51,6 +56,8 @@ jobs:
         run: mv /root/ /home/ && ln -s /home/root/ /root
       - shell: openbsd {0}
         run: set -ex && pkg_add dtc git pkgconf bzip2 xz ninja bash gmake gsed gettext-tools gnutls capstone sdl2 gtk+3 libxkbcommon zstd libslirp
+      - shell: openbsd {0}
+        run: git clone https://github.com/qemu/qemu
       - run: echo "connect with 'ssh openbsd'"
       - uses: mxschmitt/action-tmate@v3
 
@@ -59,6 +66,7 @@ jobs:
     steps:
       - run: sudo sed -i 's/deb$/deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
       - run: sudo apt update && sudo apt build-dep --arch-only -y qemu
+      - run: git clone https://github.com/qemu/qemu
       - uses: mxschmitt/action-tmate@v3
 
   debug-windows:
@@ -105,6 +113,7 @@ jobs:
       - run: git clone https://github.com/msys2/MINGW-packages --depth=1
       - run: pushd ./MINGW-packages/mingw-w64-qemu && (makepkg --syncdeps --nobuild --noprepare --noconfirm --skippgpcheck PKGBUILD || true) && popd
       - run: echo 'if [ $MSYSTEM != ${{matrix.sys}} ]; then MSYSTEM=${{matrix.sys}} bash -l; fi;' >> ~/.bashrc
+      - run: git clone https://github.com/qemu/qemu
       - uses: mxschmitt/action-tmate@v3
         with:
           msys2-location: C:/m/msys64
@@ -114,6 +123,7 @@ jobs:
     steps:
       - run: brew uninstall cmake # conflict with install command below
       - run: brew install --quiet $(env HOMEBREW_NO_ENV_HINTS=1 brew deps --include-build qemu)
+      - run: git clone https://github.com/qemu/qemu
       - uses: mxschmitt/action-tmate@v3
 
   debug-aarch64-ubuntu-2404:
@@ -121,4 +131,5 @@ jobs:
     steps:
       - run: sudo sed -i 's/deb$/deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
       - run: sudo apt update && sudo apt build-dep --arch-only -y qemu
+      - run: git clone https://github.com/qemu/qemu
       - uses: mxschmitt/action-tmate@v3

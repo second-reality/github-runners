@@ -32,4 +32,4 @@ Supported arm64 runners:
 - windows-11-arm (msys2 clangarm64 environment)
 
 This repository is mostly used to provide runners for QEMU, thus it install
-build dependencies by default.
+build dependencies and clone its repo by default.
